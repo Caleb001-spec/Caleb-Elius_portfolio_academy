@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Roller + Calculator — Caleb Elius</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subhead {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        /* Two column layout */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Card style */
+        .tool-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .tool-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Dice Roller Styles */
+        .dice-area {
+            text-align: center;
+        }
+
+        .dice {
+            font-size: 8rem;
+            background: rgba(255,255,255,0.1);
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .roll-animation {
+            transform: scale(1.2) rotate(180deg);
+        }
+
+        .roll-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 60px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .roll-btn:hover {
+            background: #ff5252;
+            transform: scale(1.02);
+        }
+
+        .history {
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .history h4 {
+            color: #aaa;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .history-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .history-item {
+            background: #ff6b6b;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* Calculator Styles */
+        .calculator {
+            width: 100%;
+        }
+
+        .calc-display {
+            background: rgba(0,0,0,0.5);
+            padding: 1.2rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            text-align: right;
+        }
+
+        .calc-expression {
+            color: #aaa;
+            font-size: 0.9rem;
+            min-height: 1.5rem;
+        }
+
+        .calc-result {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            word-break: break-all;
+        }
+
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.6rem;
+        }
+
+        .calc-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-radius: 16px;
+            cursor: pointer;
+            color: white;
+            transition: all 0.1s;
+        }
+
+        .calc-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(0.98);
+        }
+
+        .calc-btn.operator {
+            background: #ff8c00;
+        }
+
+        .calc-btn.equals {
+            background: #00b894;
+            grid-column: span 2;
+        }
+
+        .calc-btn.clear {
+            background: #e74c3c;
+        }
+
+        /* Process notes */
+        .process-note {
+            margin-top: 2rem;
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+            padding: 1.2rem;
+            border-left: 4px solid #ff8c00;
+        }
+
+        .process-note h4 {
+            color: #ff8c00;
+            margin-bottom: 0.5rem;
+        }
+
+        .process-note p {
+            color: #bbb;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 700px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            .dice {
+                font-size: 5rem;
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        footer {
+            text-align: center;
+            color: #666;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>?? Dice Roller + ?? Calculator</h1>
+        <div class="subhead">Two tools — built with JavaScript, bugs, and lessons learned</div>
+
+        <div class="tools-grid">
+            <!-- Dice Roller Section -->
+            <div class="tool-card">
+                <div class="tool-title">
+                    <span>??</span> Dice Roller
+                </div>
+                <div class="dice-area">
+                    <div class="dice" id="diceFace">??</div>
+                    <button class="roll-btn" id="rollBtn">Roll the Dice!</button>
+                    <div class="history">
+                        <h4>?? Roll History (last 5)</h4>
+                        <div class="history-list" id="historyList">
+                            <span class="history-item">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculator Section -->
+            <div class="tool-card">
+                <div class="tool-title">
+                    <span>??</span> Calculator
+                </div>
+                <div class="calculator">
+                    <div class="calc-display">
+                        <div class="calc-expression" id="calcExpression"></div>
+                        <div class="calc-result" id="calcResult">0</div>
+                    </div>
+                    <div class="calc-buttons">
+                        <button class="calc-btn clear" data-value="clear">C</button>
+                        <button class="calc-btn" data-value="(">(</button>
+                        <button class="calc-btn" data-value=")">)</button>
+                        <button class="calc-btn operator" data-value="/">÷</button>
+                        
+                        <button class="calc-btn" data-value="7">7</button>
+                        <button class="calc-btn" data-value="8">8</button>
+                        <button class="calc-btn" data-value="9">9</button>
+                        <button class="calc-btn operator" data-value="*">×</button>
+                        
+                        <button class="calc-btn" data-value="4">4</button>
+                        <button class="calc-btn" data-value="5">5</button>
+                        <button class="calc-btn" data-value="6">6</button>
+                        <button class="calc-btn operator" data-value="-">-</button>
+                        
+                        <button class="calc-btn" data-value="1">1</button>
+                        <button class="calc-btn" data-value="2">2</button>
+                        <button class="calc-btn" data-value="3">3</button>
+                        <button class="calc-btn operator" data-value="+">+</button>
+                        
+                        <button class="calc-btn" data-value="0">0</button>
+                        <button class="calc-btn" data-value=".">.</button>
+                        <button class="calc-btn equals" data-value="=">=</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Process notes - showing the messy middle! -->
+        <div class="process-note">
+            <h4>?? Bugs I fixed while building this</h4>
+            <p>
+            <strong>Bug #1:</strong> Calculator showed "NaN" when pressing equals — forgot to parse integers!<br>
+            <strong>Bug #2:</strong> Dice would roll the same number every time — fixed with Math.random()<br>
+            <strong>Bug #3:</strong> History showed undefined — had to check if array was empty first<br>
+            <strong>Lesson:</strong> Every bug taught me something. The calculator took 3 rewrites to work perfectly.
+            </p>
+        </div>
+        <footer>
+            Built by Caleb Elius — process over perfection | From construction sites to console logs
+        </footer>
+    </div>
+
+    <script>
+        // ========== DICE ROLLER ==========
+        const diceFace = document.getElementById('diceFace');
+        const rollBtn = document.getElementById('rollBtn');
+        const historyList = document.getElementById('historyList');
+        
+        let rollHistory = [];
+
+        // BUG I FIXED: First version only showed "??" — had to map numbers to emojis
+        const diceEmojis = {
+            1: '?',
+            2: '?', 
+            3: '?',
+            4: '?',
+            5: '?',
+            6: '?'
+        };
+
+        function rollDice() {
+            // Add animation
+            diceFace.classList.add('roll-animation');
+            
+            // Random number 1-6
+            const result = Math.floor(Math.random() * 6) + 1;
+            
+            // Update dice face
+            diceFace.textContent = diceEmojis[result];
+            
+            // Add to history
+            rollHistory.unshift(result);
+            if (rollHistory.length > 5) rollHistory.pop();
+            
+            updateHistory();
+            
+            // Remove animation after 0.3s
+            setTimeout(() => {
+                diceFace.classList.remove('roll-animation');
+            }, 300);
+            
+            // Console log for debugging (showing process)
+            console.log(`?? Rolled: ${result} | History: ${rollHistory}`);
+        }
+
+        function updateHistory() {
+            if (rollHistory.length === 0) {
+                historyList.innerHTML = '<span class="history-item">—</span>';
+                return;
+            }
+            
+            historyList.innerHTML = rollHistory.map(num => 
+                `<span class="history-item">${num}</span>`
+            ).join('');
+        }
+
+        rollBtn.addEventListener('click', rollDice);
+        
+        // Initial roll
+        rollDice();
+
+        // ========== CALCULATOR ==========
+        let currentExpression = '';
+        let resultDisplayed = false;
+        
+        const calcExpression = document.getElementById('calcExpression');
+        const calcResult = document.getElementById('calcResult');
+        const calcButtons = document.querySelectorAll('.calc-btn');
+        
+        function updateCalculatorDisplay() {
+            if (currentExpression === '') {
+                calcExpression.textContent = '';
+                calcResult.textContent = '0';
+            } else {
+                calcExpression.textContent = currentExpression;
+                // Try to evaluate for preview
+                try {
+                    // Replace visual operators with JS operators
+                    let evalExpr = currentExpression.replace(/×/g, '*').replace(/÷/g, '/');
+                    // BUG FIXED: Had to handle empty expressions and division by zero
+                    if (evalExpr && !evalExpr.match(/[+\-*/]$/)) {
+                        let result = eval(evalExpr);
+                        if (isFinite(result)) {
+                            calcResult.textContent = Math.round(result * 1000000) / 1000000;
+                        } else {
+                            calcResult.textContent = 'Error';
+                        }
+                    } else {
+                        calcResult.textContent = '...';
+                    }
+                } catch (e) {
+                    calcResult.textContent = 'Error';
+                }
+            }
+        }
+        
+        function handleCalculatorInput(value) {
+            // BUG FIXED: If result was displayed, clear before new input
+            if (resultDisplayed && value !== '=' && value !== 'clear') {
+                currentExpression = '';
+                resultDisplayed = false;
+            }
+            
+            switch(value) {
+                case 'clear':
+                    currentExpression = '';
+                    resultDisplayed = false;
+                    break;
+                    
+                case '=':
+                    try {
+                        let evalExpr = currentExpression.replace(/×/g, '*').replace(/÷/g, '/');
+                        let result = eval(evalExpr);
+                        if (isFinite(result)) {
+                            currentExpression = String(Math.round(result * 1000000) / 1000000);
+                            resultDisplayed = true;
+                        } else {
+                            currentExpression = 'Error';
+                            resultDisplayed = true;
+                        }
+                    } catch (e) {
+                        currentExpression = 'Error';
+                        resultDisplayed = true;
+                    }
+                    break;
+                    
+                default:
+                    // Prevent multiple operators in a row
+                    const lastChar = currentExpression.slice(-1);
+                    const operators = ['+', '-', '*', '/', '×', '÷'];
+                    
+                    if (operators.includes(value) && operators.includes(lastChar)) {
+                        // Replace last operator with new one
+                        currentExpression = currentExpression.slice(0, -1) + value;
+                    } else {
+                        currentExpression += value;
+                    }
+                    resultDisplayed = false;
+                    break;
+            }
+            
+            updateCalculatorDisplay();
+            
+            // Console log for debugging
+            console.log(`?? Calculator: ${currentExpression}`);
+        }
+        
+        calcButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const value = btn.getAttribute('data-value');
+                if (value) {
+                    handleCalculatorInput(value);
+                }
+            });
+        });
+        
+        // Keyboard support for calculator
+        document.addEventListener('keydown', (e) => {
+            const key = e.key;
+            if (key >= '0' && key <= '9') {
+                handleCalculatorInput(key);
+            } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+                let mapped = key === '*' ? '×' : (key === '/' ? '÷' : key);
+                handleCalculatorInput(mapped);
+            } else if (key === 'Enter' || key === '=') {
+                handleCalculatorInput('=');
+            } else if (key === 'Escape' || key === 'c' || key === 'C') {
+                handleCalculatorInput('clear');
+            } else if (key === '.') {
+                handleCalculatorInput('.');
+            } else if (key === '(') {
+                handleCalculatorInput('(');
+            } else if (key === ')') {
+                handleCalculatorInput(')');
+            }
+        });
+        
+        updateCalculatorDisplay();
+        
+        // Process note for portfolio:
+        console.log(`
+        ?? BUG LOG FOR THIS PROJECT:
+        1. Calculator showed "NaN" ? Fixed with isFinite() check
+        2. Dice emojis didn't show ? Created mapping object
+        3. Multiple operators in a row crashed it ? Added operator validation
+        4. Division by zero ? isFinite() saved me
+        
+        ?? WHAT I LEARNED:
+        Math.random(), eval() is dangerous but useful for learning, 
+        always validate user input, and console.log is your best friend!
+        `);
+    </script>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caleb Elius — Builder + Developer | Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #0a0a0a;
+            color: #ededed;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            border-bottom: 1px solid #222;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 3rem 0 2rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 0%, #a8a8a8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero .tagline {
+            font-size: 1.2rem;
+            color: #888;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero-badges {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .badge {
+            background: #1a1a1a;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            border: 1px solid #333;
+        }
+
+        /* Section headers */
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 2.5rem 0 1.5rem 0;
+            letter-spacing: -0.01em;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+        }
+
+        /* Cards */
+        .card {
+            background: #111;
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #222;
+            transition: all 0.2s;
+        }
+
+        .card:hover {
+            border-color: #3b82f6;
+        }
+
+        /* Project grid */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .project-card {
+            background: #111;
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid #222;
+            transition: transform 0.2s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            border-color: #3b82f6;
+        }
+
+        .project-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .project-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-desc {
+            color: #999;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .project-link:hover {
+            text-decoration: underline;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.8rem;
+        }
+
+        .tech-tag {
+            background: #1a1a1a;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: #3b82f6;
+        }
+
+        /* Process note */
+        .process-note {
+            background: #0f0f1a;
+            border-left: 4px solid #3b82f6;
+            padding: 1.2rem;
+            border-radius: 16px;
+            margin: 1.5rem 0;
+        }
+
+        /* Skills */
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin: 1rem 0;
+        }
+
+        .skill-chip {
+            background: #1a1a1a;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            border: 1px solid #2a2a2a;
+        }
+
+        /* Timeline */
+        .timeline-item {
+            margin-bottom: 1.2rem;
+            padding-left: 1rem;
+            border-left: 2px solid #3b82f6;
+        }
+
+        .timeline-year {
+            color: #3b82f6;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Contact */
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ccc;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #222;
+            margin-top: 2rem;
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        hr {
+            border-color: #222;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 700px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 1.4rem;
+            }
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-links a {
+                margin-left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">? Caleb Elius</div>
+        <div class="nav-links">
+            <a href="#projects">Projects</a>
+            <a href="#journey">Journey</a>
+            <a href="#skills">Skills</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>From blueprints<br>to browser consoles.</h1>
+            <div class="tagline">Construction technologist ? Web developer. I build things that work.</div>
+            <div class="hero-badges">
+                <span class="badge">??? Construction background</span>
+                <span class="badge">?? Self-taught developer</span>
+                <span class="badge">?? Research writer</span>
+                <span class="badge">?? Meru, Kenya</span>
+            </div>
+        </div>
+
+        <!-- Why Apple Academy -->
+        <div class="card">
+            <h2 style="font-size: 1.4rem; margin-bottom: 0.5rem;">?? Why I'm applying to Apple Developer Academy</h2>
+            <p>I was studying building plans and managing construction sites. Then I wrote my first line of code — and something clicked. Building a house takes months. Building an app takes hours, and you can iterate endlessly.</p>
+            <p style="margin-top: 0.8rem;">The Academy isn't about having perfect skills. It's about hunger. And I'm starving to learn, collaborate, and build apps that solve real problems — starting with small businesses in Kenya.</p>
+            <div class="process-note" style="margin-top: 1rem;">
+                ?? <strong>What I bring:</strong> A unique interdisciplinary mindset (construction + code), documented bug fixes, daily learning habits, and genuine excitement to grow.
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <h2 class="section-title" id="projects">?? Featured Projects</h2>
+        <div class="project-grid">
+            <!-- Weather App -->
+            <div class="project-card">
+                <div class="project-emoji">???</div>
+                <div class="project-title">Weather App</div>
+                <div class="project-desc">Live weather data using OpenWeatherMap API. Shows temperature, humidity, wind speed, and feels-like temp.</div>
+                <div class="tech-stack">
+                    <span class="tech-tag">API</span>
+                    <span class="tech-tag">Async JS</span>
+                    <span class="tech-tag">Fetch</span>
+                </div>
+                <a href="weather-app/index.html" class="project-link">View Project ?</a>
+            </div>
+
+            <!-- Dice + Calculator -->
+            <div class="project-card">
+                <div class="project-emoji">????</div>
+                <div class="project-title">Dice Roller + Calculator</div>
+                <div class="project-desc">Two tools in one: roll dice with history, plus a fully functional calculator with keyboard support.</div>
+                <div class="tech-stack">
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">DOM</span>
+                    <span class="tech-tag">Events</span>
+                </div>
+                <a href="dice-calculator/index.html" class="project-link">View Project ?</a>
+            </div>
+
+            <!-- Grocery Store -->
+            <div class="project-card">
+                <div class="project-emoji">??</div>
+                <div class="project-title">FreshMart Grocery</div>
+                <div class="project-desc">E-commerce style grocery store with category filters, shopping cart, local storage, and checkout.</div>
+                <div class="tech-stack">
+                    <span class="tech-tag">LocalStorage</span>
+                    <span class="tech-tag">Cart</span>
+                    <span class="tech-tag">Filters</span>
+                </div>
+                <a href="grocery-store/index.html" class="project-link">View Project ?</a>
+            </div>
+
+            <!-- This Portfolio -->
+            <div class="project-card">
+                <div class="project-emoji">??</div>
+                <div class="project-title">This Portfolio</div>
+                <div class="project-desc">Designed to show my personality, process, and interdisciplinary background. Built from scratch.</div>
+                <div class="tech-stack">
+                    <span class="tech-tag">HTML/CSS</span>
+                    <span class="tech-tag">Responsive</span>
+                    <span class="tech-tag">Dark Mode</span>
+                </div>
+                <a href="#" class="project-link">View Project ?</a>
+            </div>
+        </div>
+
+        <!-- Bug log / Process -->
+        <div class="process-note">
+            <strong>?? My Bug Log (showing my learning process)</strong><br>
+            • Weather App: API key didn't work for 2 hours ? forgot to activate it<br>
+            • Calculator: Showed "NaN" ? forgot parseInt() on values<br>
+            • Grocery Store: Cart items duplicated ? fixed quantity update logic<br>
+            • Dice Roller: Same number every time ? fixed Math.random() implementation<br><br>
+            <strong>?? Lesson:</strong> Every bug teaches me something. I document them all.
+        </div>
+
+        <!-- Interdisciplinary (Superpower) -->
+        <h2 class="section-title">?? Interdisciplinary Superpower</h2>
+        <div class="card">
+            <p><strong>Construction Technology + Web Development</strong></p>
+            <p style="margin-top: 0.5rem;">I don't just build websites — I think about them like buildings. In construction, you need blueprints, material lists, timelines, and safety checks. In web development, that's wireframes, component libraries, sprints, and error handling.</p>
+            <p style="margin-top: 0.8rem;"><strong>Concrete example:</strong> At Public Works Meru, I managed construction schedules and quality control. That experience taught me resource management, attention to detail, and team coordination — skills I apply directly to coding projects.</p>
+            <p style="margin-top: 0.8rem;"><strong>Plus research writing:</strong> I write clear documentation because I learned to explain complex ideas simply.</p>
+        </div>
+
+        <!-- Learning Journey -->
+        <h2 class="section-title" id="journey">?? My Journey</h2>
+        <div class="card">
+            <div class="timeline-item">
+                <div class="timeline-year">2022 - 2025</div>
+                <div><strong>Diploma in Building & Construction Technology</strong> — Meru National Polytechnic</div>
+                <div style="color: #888; font-size: 0.85rem;">Project management, structural design, site supervision</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2023 - 2024</div>
+                <div><strong>W3Schools Coding Program</strong> — Online</div>
+                <div style="color: #888; font-size: 0.85rem;">HTML, CSS, JavaScript, SQL, Python, Rust</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2024 - Present</div>
+                <div><strong>Attachee at Public Works Meru + Freelance Web Developer</strong></div>
+                <div style="color: #888; font-size: 0.85rem;">Juggling construction schedules and building web projects</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">Now</div>
+                <div><strong>Applying to Apple Developer Academy</strong></div>
+                <div style="color: #888; font-size: 0.85rem;">Ready to level up and build with a team</div>
+            </div>
+        </div>
+
+        <!-- Skills -->
+        <h2 class="section-title" id="skills">?? Skills & Tools</h2>
+        <div class="card">
+            <div class="skills-grid">
+                <span class="skill-chip">HTML5</span>
+                <span class="skill-chip">CSS3</span>
+                <span class="skill-chip">JavaScript (ES6+)</span>
+                <span class="skill-chip">Python</span>
+                <span class="skill-chip">Rust (learning)</span>
+                <span class="skill-chip">SQL</span>
+                <span class="skill-chip">VS Code</span>
+                <span class="skill-chip">Git & GitHub</span>
+                <span class="skill-chip">Figma</span>
+                <span class="skill-chip">AutoCAD</span>
+            </div>
+            <hr>
+            <div class="skills-grid">
+                <span class="skill-chip">??? Teamwork</span>
+                <span class="skill-chip">?? Communication</span>
+                <span class="skill-chip">?? Problem-solving</span>
+                <span class="skill-chip">?? Attention to detail</span>
+                <span class="skill-chip">? Fast learner</span>
+            </div>
+        </div>
+
+        <!-- Work Ethic -->
+        <h2 class="section-title">? How I Work</h2>
+        <div class="card">
+            <p><strong>?? Daily habit:</strong> 30 minutes of coding every single day — even when tired.</p>
+            <p style="margin-top: 0.5rem;"><strong>?? Bug journal:</strong> I write down every bug and how I fixed it.</p>
+            <p style="margin-top: 0.5rem;"><strong>??? Ask early:</strong> I share rough drafts, not perfect-but-wrong final products.</p>
+            <p style="margin-top: 0.5rem;"><strong>?? Local competitions:</strong> Participated in coding competitions — didn't win, but learned to think under pressure.</p>
+        </div>
+
+        <!-- Contact -->
+        <h2 class="section-title" id="contact">?? Let's Connect</h2>
+        <div class="card">
+            <div class="contact-info">
+                <div class="contact-item">?? calebelius001@gmail.com</div>
+                <div class="contact-item">?? +254 758 490416</div>
+                <div class="contact-item">?? Meru, Kenya</div>
+                <div class="contact-item">?? GitHub: caleb001-spec</div>
+            </div>
+            <div class="process-note" style="margin-top: 1rem;">
+                ? I'm not the finished product. I'm the person who shows up, learns fast, and builds with heart. That's what I'll bring to the Apple Developer Academy.
+            </div>
+        </div>
+
+        <footer>
+            Caleb Elius — Builder. Coder. Learner.<br>
+            This portfolio is a living document. Just like my journey.
+        </footer>
+    </div>
+</body>
+</html>

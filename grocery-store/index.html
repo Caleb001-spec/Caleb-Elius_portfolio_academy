@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshMart Grocery — Caleb Elius</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f5f5f0;
+            color: #2d2d2a;
+        }
+
+        /* Header / Navigation */
+        .header {
+            background: #2d6a4f;
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: #ffd166;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #ffd166;
+        }
+
+        .cart-icon {
+            background: #1b4332;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero section */
+        .hero {
+            background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Category filter */
+        .categories {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .category-btn {
+            background: white;
+            border: 2px solid #2d6a4f;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .category-btn:hover {
+            background: #2d6a4f;
+            color: white;
+        }
+
+        .category-btn.active {
+            background: #2d6a4f;
+            color: white;
+        }
+
+        /* Product grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .product-img {
+            background: #f0eee8;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .product-info {
+            padding: 1.2rem;
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            color: #2d6a4f;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2d6a4f;
+            margin-bottom: 0.8rem;
+        }
+
+        .add-to-cart {
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 40px;
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .add-to-cart:hover {
+            background: #1b4332;
+        }
+
+        /* Shopping Cart Sidebar */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-overlay.open {
+            right: 0;
+        }
+
+        .cart-header {
+            background: #2d6a4f;
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h3 {
+            font-size: 1.3rem;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 500;
+        }
+
+        .cart-item-price {
+            font-size: 0.8rem;
+            color: #2d6a4f;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .cart-item-controls button {
+            background: #f0eee8;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cart-item-qty {
+            font-weight: 600;
+        }
+
+        .cart-total {
+            padding: 1.5rem;
+            border-top: 2px solid #eee;
+            background: #fafaf8;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkout-btn {
+            background: #ffd166;
+            color: #2d2d2a;
+            border: none;
+            padding: 1rem;
+            width: 100%;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #888;
+            padding: 2rem;
+        }
+
+        /* Process note section */
+        .process-note {
+            background: #fff8e7;
+            border-left: 4px solid #ffd166;
+            padding: 1.2rem;
+            margin-top: 2rem;
+            border-radius: 12px;
+        }
+
+        footer {
+            background: #1b4332;
+            color: #aaa;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 700px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            .container {
+                padding: 1rem;
+            }
+            .product-grid {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">Fresh<span>Mart</span> ??</div>
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">Shop</a>
+                <a href="#">Deals</a>
+            </div>
+            <div class="cart-icon" id="cartIcon">
+                ?? Cart (<span id="cartCount">0</span>)
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Fresh Groceries, Delivered</h1>
+        <p>Farm-fresh vegetables, fruits, dairy, and bakery items — straight to your kitchen.</p>
+    </section>
+
+    <div class="container">
+        <!-- Category Filter -->
+        <div class="categories" id="categories">
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="vegetables">?? Vegetables</button>
+            <button class="category-btn" data-category="fruits">?? Fruits</button>
+            <button class="category-btn" data-category="dairy">?? Dairy</button>
+            <button class="category-btn" data-category="bakery">?? Bakery</button>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-grid" id="productGrid"></div>
+
+        <!-- Process note - showing my learning journey -->
+        <div class="process-note">
+            <strong>?? Process note from Caleb:</strong> This grocery store started as a simple grid. I added the cart, then broke it 3 times (items disappearing, price calculation wrong, quantity bugs). Each bug taught me something new. The filter system took 2 full days — but now it works!
+        </div>
+    </div>
+
+    <!-- Shopping Cart Sidebar -->
+    <div class="cart-overlay" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Your Cart ??</h3>
+            <button class="close-cart" id="closeCart">?</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart">Your cart is empty</div>
+        </div>
+        <div class="cart-total">
+            <div class="total-row">
+                <span>Total:</span>
+                <span id="cartTotalPrice">KSh 0</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Checkout ?</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>FreshMart Grocery — Built by Caleb Elius | Construction mindset meets code</p>
+        <p style="font-size: 0.7rem; margin-top: 0.5rem;">?? Bugs fixed: cart persistence, quantity updates, filter rendering, price formatting</p>
+    </footer>
+
+    <script>
+        // Product Database
+        const products = [
+            { id: 1, name: "Fresh Carrots", category: "vegetables", price: 80, emoji: "??" },
+            { id: 2, name: "Tomatoes", category: "vegetables", price: 60, emoji: "??" },
+            { id: 3, name: "Spinach", category: "vegetables", price: 50, emoji: "??" },
+            { id: 4, name: "Onions", category: "vegetables", price: 70, emoji: "??" },
+            { id: 5, name: "Red Apples", category: "fruits", price: 120, emoji: "??" },
+            { id: 6, name: "Bananas", category: "fruits", price: 50, emoji: "??" },
+            { id: 7, name: "Oranges", category: "fruits", price: 40, emoji: "??" },
+            { id: 8, name: "Mangoes", category: "fruits", price: 90, emoji: "??" },
+            { id: 9, name: "Fresh Milk", category: "dairy", price: 110, emoji: "??" },
+            { id: 10, name: "Yogurt", category: "dairy", price: 65, emoji: "??" },
+            { id: 11, name: "Cheese", category: "dairy", price: 250, emoji: "??" },
+            { id: 12, name: "Butter", category: "dairy", price: 180, emoji: "??" },
+            { id: 13, name: "Sourdough Bread", category: "bakery", price: 150, emoji: "??" },
+            { id: 14, name: "Croissants", category: "bakery", price: 200, emoji: "??" },
+            { id: 15, name: "Muffins", category: "bakery", price: 90, emoji: "??" }
+        ];
+
+        // Shopping Cart State
+        let cart = [];
+        let currentCategory = "all";
+
+        // Helper functions
+        function saveCart() {
+            localStorage.setItem('groceryCart', JSON.stringify(cart));
+        }
+
+        function loadCart() {
+            const saved = localStorage.getItem('groceryCart');
+            if (saved) {
+                cart = JSON.parse(saved);
+            }
+            updateCartUI();
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            
+            saveCart();
+            updateCartUI();
+            
+            // Show feedback
+            const btn = document.querySelector(`[data-product-id="${productId}"]`);
+            if (btn) {
+                btn.textContent = "? Added!";
+                setTimeout(() => {
+                    btn.textContent = "Add to Cart";
+                }, 800);
+            }
+        }
+
+        function removeFromCart(productId) {
+            const index = cart.findIndex(item => item.id === productId);
+            if (index !== -1) {
+                if (cart[index].quantity > 1) {
+                    cart[index].quantity--;
+                } else {
+                    cart.splice(index, 1);
+                }
+            }
+            saveCart();
+            updateCartUI();
+        }
+
+        function deleteItem(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            saveCart();
+            updateCartUI();
+        }
+
+        function getCartTotal() {
+            return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        }
+
+        function getCartItemCount() {
+            return cart.reduce((sum, item) => sum + item.quantity, 0);
+        }
+
+        function updateCartUI() {
+            // Update cart count badge
+            document.getElementById('cartCount').textContent = getCartItemCount();
+            
+            // Update cart sidebar
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartTotalSpan = document.getElementById('cartTotalPrice');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty ??</div>';
+                cartTotalSpan.textContent = 'KSh 0';
+                return;
+            }
+            
+            cartItemsContainer.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.emoji} ${item.name}</div>
+                        <div class="cart-item-price">KSh ${item.price} each</div>
+                    </div>
+                    <div class="cart-item-controls">
+                        <button onclick="removeFromCart(${item.id})">-</button>
+                        <span class="cart-item-qty">${item.quantity}</span>
+                        <button onclick="addToCart(${item.id})">+</button>
+                        <button onclick="deleteItem(${item.id})" style="background:#ff6b6b;">???</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            cartTotalSpan.textContent = `KSh ${getCartTotal()}`;
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            let filtered = products;
+            
+            if (currentCategory !== 'all') {
+                filtered = products.filter(p => p.category === currentCategory);
+            }
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div style="text-align:center; padding:2rem;">No products in this category</div>';
+                return;
+            }
+            
+            grid.innerHTML = filtered.map(product => `
+                <div class="product-card">
+                    <div class="product-img">${product.emoji}</div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-category">${product.category}</div>
+                        <div class="product-price">KSh ${product.price}</div>
+                        <button class="add-to-cart" data-product-id="${product.id}">Add to Cart</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Attach event listeners to new buttons
+            document.querySelectorAll('.add-to-cart').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(btn.getAttribute('data-product-id'));
+                    addToCart(id);
+                });
+            });
+        }
+
+        // Category filter
+        function setupCategoryFilters() {
+            const btns = document.querySelectorAll('.category-btn');
+            btns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.getAttribute('data-category');
+                    renderProducts();
+                });
+            });
+        }
+
+        // Cart sidebar controls
+        function setupCartSidebar() {
+            const cartIcon = document.getElementById('cartIcon');
+            const cartSidebar = document.getElementById('cartSidebar');
+            const closeCart = document.getElementById('closeCart');
+            
+            cartIcon.addEventListener('click', () => {
+                cartSidebar.classList.add('open');
+            });
+            
+            closeCart.addEventListener('click', () => {
+                cartSidebar.classList.remove('open');
+            });
+            
+            // Close on outside click
+            cartSidebar.addEventListener('click', (e) => {
+                if (e.target === cartSidebar) {
+                    cartSidebar.classList.remove('open');
+                }
+            });
+        }
+
+        function setupCheckout() {
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            checkoutBtn.addEventListener('click', () => {
+                if (cart.length === 0) {
+                    alert('Your cart is empty! Add some items first.');
+                } else {
+                    alert(`Thank you for shopping at FreshMart!\nTotal: KSh ${getCartTotal()}\n\n(This is a demo — your order would be processed here.)`);
+                    // BUG FIXED: Originally forgot to clear cart after checkout
+                    cart = [];
+                    saveCart();
+                    updateCartUI();
+                    document.getElementById('cartSidebar').classList.remove('open');
+                }
+            });
+        }
+
+        // Initialize
+        function init() {
+            loadCart();
+            renderProducts();
+            setupCategoryFilters();
+            setupCartSidebar();
+            setupCheckout();
+            
+            console.log(`
+            ?? BUGS FIXED IN THIS GROCERY APP:
+            1. Cart items would duplicate — fixed with proper quantity update
+            2. Total price was NaN — had to parse prices as numbers
+            3. Filter would break cart buttons — reattach listeners after render
+            4. Checkout didn't clear cart — added cart reset
+            5. Local storage not saving — fixed saveCart() call placement
+            
+            ?? WHAT I LEARNED:
+            State management is tricky! Always update UI after any data change.
+            Local storage is powerful but easy to mess up.
+            `);
+        }
+        
+        init();
+    </script>
+</body>
+</html>
